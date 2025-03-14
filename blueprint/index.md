@@ -10,6 +10,8 @@ summary: This Genesys Cloud Developer Blueprint explains how to set up a WebRTC 
 
 This Genesys Cloud Developer Blueprint explains how to set up a WebRTC phone in CX as Code or Genesys Cloud.
 
+![Flowchart](images/webrtc-sdk-thumb.png "Flowchart")
+
 ## Solution Components
 
 - Genesys Cloud - a suite of Genesys cloud services for enterprise-grade communications, collaboration, and contact center management.
@@ -127,67 +129,13 @@ git clone https://github.com/GenesysCloudBlueprints/webrtc-sdk-blueprint.git
 
 If you haven't installed Terraform yet, installation instructions are provided [here](https://developer.hashicorp.com/terraform/install?product_intent=terraform "Goes to Terraform installation instructions in Hashicorp Developer").
 
-Go to the `provider.tf` file where you can configure the Terraform and the Genesys Cloud Provider. In the `genesyscloud` provider, paste the `Client ID` and `Client Secret` that you just created. Refer to the [Create an OAuth Client](#create-an-oauth-client "Goes to the Create an OAuth Client section") section. You can configure other properties in the Genesys Cloud Provider. For more information on the provider configuration, you can access the [documentation](https://registry.terraform.io/providers/MyPureCloud/genesyscloud/latest/docs "Goes to the Genesys Cloud Provider Documentation in Terraform Registry").
+Go to the `provider.tf` file to configure Terraform and the Genesys Cloud Provider. In the `genesyscloud` provider, paste the `Client ID` and `Client Secret` that you just created. Refer to the [Create an OAuth Client](#create-an-oauth-client "Goes to the Create an OAuth Client section") section. You can configure other properties with the help of the Genesys Cloud Provider [documentation](https://registry.terraform.io/providers/MyPureCloud/genesyscloud/latest/docs "Goes to the Genesys Cloud Provider Documentation in Terraform Registry").
 
-```hcl
-terraform {
-  required_providers {
-    genesyscloud = {
-      source  = "mypurecloud/genesyscloud"
-      version = "~> 1.59.1" # You may update this to the latest version as needed
-    }
-  }
-}
+:::primary
+**Important**: It is recommended that sensitive values like **Client ID**, **Client Secret**, and **Region** are not stored in your Terraform project. One method to do this is to store these values as an environment variable. Use `GENESYSCLOUD_OAUTHCLIENT_ID` for Client ID, `GENESYSCLOUD_OAUTHCLIENT_SECRET` for Client Secret, and `GENESYSCLOUD_REGION` for the Region.
+:::
 
-provider "genesyscloud" {
-  oauthclient_id     = "Enter your OAuth Client ID here"
-  oauthclient_secret = "Enter your OAuth Client Secret here"
-
-  # Optional parameters that you can configure. You can comment out or remove the parameters that you don't need.
-
-  aws_region   = "Enter your preferred region here"
-  access_token = "If you want to use this instead of the OAuth client ID and secret"
-
-  # Gateway Settings
-  gateway {
-    host     = "gateway.yourhostname.com"
-    port     = "443"
-    protocol = "https"
-    auth {
-      username = "Enter your username here"
-      password = "Enter your password here"
-    }
-
-    path_params {
-      path_name  = "Enter your path name here"
-      path_value = "Enter your path value here"
-    }
-  }
-
-  # Proxy Settings
-  proxy {
-    host     = "proxy.yourhostname.com"
-    port     = "443"
-    protocol = "https"
-    auth {
-      username = "Enter your username here"
-      password = "Enter your password here"
-    }
-  }
-
-  # SDK Debug Settings
-  sdk_debug           = false
-  sdk_debug_file_path = "Enter your debug file path here"
-  sdk_debug_format    = "Enter your debug format here"
-
-  # Token Pool Settings
-  token_pool_size = 12345
-}
-```
-
-:::primary Important: It is recommended that sensitive values like Client ID and Client Secret are not stored in your Terraform project. One method to do this is to store these values as an environment variable. For the client ID, use GENESYSCLOUD_OAUTHCLIENT_ID and for client secret, use GENESYSCLOUD_OAUTHCLIENT_SECRET. :::
-
-Once configured, run `terraform init` or `terraform init -upgrade` _(if there's any update to the providers)_ to ensure that the project is ready to run with your configurations.
+Once configured, run `terraform init` or `terraform init -upgrade` _(if there's any update to the providers)_ in the blueprint's root directory to ensure that the project is ready to run with your configurations.
 
 ### Setup and Configure your Terraform Resources
 
